@@ -3,3 +3,9 @@
 *.o
 *.a
 nboulif.filler
+
+filler\.trace
+
+rslt\.txt
+
+testsh
