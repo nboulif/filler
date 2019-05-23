@@ -66,8 +66,6 @@ typedef struct		s_utils2
 int					parse_data(t_utils2 *u, char *line);
 int					main(void);
 
-static int			ft_clean(char **line);
-static char			*ft_join_cust(char *src, char *src2, char *dst);
 int					get_next_line(const int fd, char **line);
 
 t_map				*init_map(char *line);

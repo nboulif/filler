@@ -75,7 +75,6 @@ t_piece		*retrieve_piece(char *line)
 {
 	t_piece		*p;
 	char		**tmp_piece;
-	int			i;
 
 	p = (t_piece*)malloc((sizeof(t_piece)));
 	p->h = ft_atoi(ft_strsplit(line, ' ')[1]);

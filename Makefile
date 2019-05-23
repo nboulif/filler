@@ -10,50 +10,67 @@
 #                                                                              #
 # **************************************************************************** #
 
-C = clang
-
 NAME = nboulif.filler
+
+CC = gcc
 
 FLAGS = -Wall -Wextra -Werror -O3
 
-LIBFT = libft
+LIBRARIES = -lft -L$(LIBFT_DIRECTORY)
+INCLUDES = -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADERS)
 
-DIR_S = srcs
+LIBFT = $(LIBFT_DIRECTORY)libft.a
+LIBFT_DIRECTORY = libft/
+LIBFT_HEADERS = $(LIBFT_DIRECTORY)
 
-DIR_O = obj
+HEADERS_LIST = filler.h
+HEADERS_DIRECTORY = ./includes/
+HEADERS = $(addprefix $(HEADERS_DIRECTORY), $(HEADERS_LIST))
 
-HEADER = includes
+SOURCES_DIRECTORY = srcs/
+SOURCES_LIST = filler.c get_next_line.c \
+				parse_piece.c parse_map.c solve.c tools.c
+SOURCES = $(addprefix $(SOURCES_DIRECTORY), $(SOURCES_LIST))
 
-SOURCES = filler.c get_next_line.c parse_piece.c parse_map.c solve.c tools.c
+OBJECTS_DIRECTORY = objs/
+OBJECTS_LIST = $(patsubst %.c, %.o, $(SOURCES_LIST))
+OBJECTS	= $(addprefix $(OBJECTS_DIRECTORY), $(OBJECTS_LIST))
 
-SRCS = $(addprefix $(DIR_S)/,$(SOURCES))
+GREEN = \033[0;32m
+RED = \033[0;31m
+RESET = \033[0m
 
-OBJS = $(addprefix $(DIR_O)/,$(SOURCES:.c=.o))
+.PHONY: all clean fclean re
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	@make -C $(LIBFT)
-	$(CC) $(FLAGS) $(OBJS) $(LIBFT)/libft.a -o $(NAME)
+$(NAME): $(LIBFT) $(OBJECTS_DIRECTORY) $(OBJECTS)
+	@$(CC) $(FLAGS) $(LIBRARIES) $(INCLUDES) $(OBJECTS) -o $(NAME) 
+	@echo "\n$(NAME): $(GREEN)object files were created$(RESET)"
+	@echo "$(NAME): $(GREEN)$(NAME) was created$(RESET)"
 
-$(DIR_O)/%.o: $(DIR_S)/%.c 
-	@mkdir -p $(DIR_O)
-	@$(CC) -I $(HEADER) -o $@ -c $<
+$(OBJECTS_DIRECTORY):
+	@mkdir -p $(OBJECTS_DIRECTORY)
+	@echo "$(NAME): $(GREEN)$(OBJECTS_DIRECTORY) was created$(RESET)"
 
-norme:
-	norminette ./libft/
-	@echo
-	norminette ./$(HEADER)/
-	@echo
-	norminette ./$(DIR_S)/
+$(OBJECTS_DIRECTORY)%.o : $(SOURCES_DIRECTORY)%.c $(HEADERS)
+	@$(CC) $(FLAGS) -c $(INCLUDES) $< -o $@
+	@echo "$(GREEN).$(RESET)\c"
+
+$(LIBFT):
+	@echo "$(NAME): $(GREEN)Creating $(LIBFT)...$(RESET)"
+	@$(MAKE) -sC $(LIBFT_DIRECTORY)
 
 clean:
-	@rm -f $(OBJS)
-	@rm -rf $(DIR_O)
-	@make clean -C $(LIBFT)
+	@$(MAKE) -sC $(LIBFT_DIRECTORY) clean
+	@rm -rf $(OBJECTS_DIRECTORY)
+	@echo "$(NAME): $(RED)$(OBJECTS_DIRECTORY) was deleted$(RESET)"
+	@echo "$(NAME): $(RED)object files were deleted$(RESET)"
 
 fclean: clean
+	@rm -f $(LIBFT)
+	@echo "$(NAME): $(RED)$(LIBFT) was deleted$(RESET)"
 	@rm -f $(NAME)
-	@make fclean -C $(LIBFT)
-
+	@echo "$(NAME): $(RED)$(NAME) was deleted$(RESET)"
+	
 re: fclean all
