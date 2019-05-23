@@ -38,24 +38,24 @@ int			parse_data(t_utils2 *u, char *line)
 int			main(void)
 {
 	char		*line;
-	t_utils2	*u;
+	t_utils2	u;
 	int			res;
 
-	u = init_utils_struct();
+	init_utils_struct(&u);
 	while (1)
 	{
-		reinit_utils_struct(u);
+		reinit_utils_struct(&u);
 		while ((res = get_next_line(0, &line)) == 1)
 		{
-			res = parse_data(u, line);
+			res = parse_data(&u, line);
 			if (res == 2 || res == -1)
 				break ;
 		}
 		if (res == -1)
 			return (-1);
-		get_my_best_pos(u, 0, 0, 0);
-		send_result(u);
-		if (u->best_y <= 0 && u->best_x <= 0)
+		get_my_best_pos(&u, 0, 0, 0);
+		send_result(&u);
+		if (u.best_y <= 0 && u.best_x <= 0)
 			break ;
 	}
 	return (0);

@@ -86,6 +86,6 @@ void				get_my_best_pos(t_utils2 *u, int ln, int col, int count);
 void				send_result(t_utils2 *u);
 float				get_distance(int x1, int x2, int y1, int y2);
 void				reinit_utils_struct(t_utils2 *u);
-t_utils2			*init_utils_struct(void);
+void				init_utils_struct(t_utils2 *u);
 
 #endif

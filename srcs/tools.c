@@ -39,14 +39,10 @@ void			reinit_utils_struct(t_utils2 *u)
 	u->best_x = 9999;
 }
 
-t_utils2		*init_utils_struct(void)
+void			init_utils_struct(t_utils2 *u)
 {
-	t_utils2	*u;
-
-	u = (t_utils2*)malloc(sizeof(t_utils2));
 	u->pp = 1;
 	u->my_char = 'O';
 	u->enemy_char = 'X';
 	reinit_utils_struct(u);
-	return (u);
 }
