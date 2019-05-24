@@ -73,12 +73,14 @@ t_piece		*parse_piece(char **tmp_piece, t_piece *p)
 
 t_piece		*retrieve_piece(char *line)
 {
-	t_piece		p;
+	t_piece		*p;
 	char		**tmp_piece;
 
-	p.h = ft_atoi(ft_strsplit(line, ' ')[1]);
-	p.w = ft_atoi(ft_strsplit(line, ' ')[2]);
+	if (!(p = (t_piece*)malloc(sizeof(t_piece))))
+		return (NULL);
+	p->h = ft_atoi(ft_strsplit(line, ' ')[1]);
+	p->w = ft_atoi(ft_strsplit(line, ' ')[2]);
 	ft_strdel(&line);
-	tmp_piece = read_piece(line, &p);
-	return (parse_piece(tmp_piece, &p));
+	tmp_piece = read_piece(line, p);
+	return (parse_piece(tmp_piece, p));
 }
