@@ -12,7 +12,7 @@
 
 #include "filler.h"
 
-int			try_put_piece(t_utils2 *u, int m_ln, int m_col)
+int			try_put_piece(t_filler *u, int m_ln, int m_col)
 {
 	int p_ln;
 	int p_col;
@@ -38,7 +38,7 @@ int			try_put_piece(t_utils2 *u, int m_ln, int m_col)
 	return (count_sp);
 }
 
-float		get_dist_nearest_enemy(t_utils2 *u, int ln1, int col1)
+float		get_dist_nearest_enemy(t_filler *u, int ln1, int col1)
 {
 	int		ln;
 	int		col;
@@ -65,7 +65,7 @@ float		get_dist_nearest_enemy(t_utils2 *u, int ln1, int col1)
 	return (dist);
 }
 
-void		get_my_best_pos(t_utils2 *u, int ln, int col, int count)
+void		get_my_best_pos(t_filler *u, int ln, int col, int count)
 {
 	float tmp_dist;
 

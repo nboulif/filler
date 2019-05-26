@@ -49,7 +49,7 @@ typedef struct		s_piece
 	int			o_x_1;
 }					t_piece;
 
-typedef struct		s_utils2
+typedef struct		s_filler
 {
 	t_map		*m;
 	t_piece		*p;
@@ -61,9 +61,9 @@ typedef struct		s_utils2
 	float		dist;
 	int			count_all_pos;
 
-}					t_utils2;
+}					t_filler;
 
-int					parse_data(t_utils2 *u, char *line);
+int					parse_data(t_filler *u, char *line);
 int					main(void);
 
 int					get_next_line(const int fd, char **line);
@@ -79,13 +79,15 @@ t_piece				*create_piece(char **tmp_piece, t_piece *p, int ln,
 t_piece				*parse_piece(char **tmp_piece, t_piece *p);
 t_piece				*retrieve_piece(char *line);
 
-int					try_put_piece(t_utils2 *u, int m_ln, int m_col);
-float				get_dist_nearest_enemy(t_utils2 *u, int ln1, int col1);
-void				get_my_best_pos(t_utils2 *u, int ln, int col, int count);
+int					try_put_piece(t_filler *u, int m_ln, int m_col);
+float				get_dist_nearest_enemy(t_filler *u, int ln1, int col1);
+void				get_my_best_pos(t_filler *u, int ln, int col, int count);
 
-void				send_result(t_utils2 *u);
+void				send_result(t_filler *u);
 float				get_distance(int x1, int x2, int y1, int y2);
-void				reinit_utils_struct(t_utils2 *u);
-void				init_utils_struct(t_utils2 *u);
+void				reinit_utils_struct(t_filler *u);
+void				init_utils_struct(t_filler *u);
+
+int					free_splited_line(char **ln_split);
 
 #endif

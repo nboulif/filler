@@ -20,30 +20,26 @@ int			is_empty_col(char **piece, int ln_start, int ln_max, int col)
 	return (1);
 }
 
-char		**read_piece(char *line, t_piece *p)
-{
-	char		**tmp_piece;
-	int			ln;
-	int			res;
-
-	tmp_piece = (char**)malloc((sizeof(char*) * p->h) + 1);
-	ln = -1;
-	while (++ln < p->h && (res = get_next_line(0, &line)) >= 0)
-		tmp_piece[ln] = line;
-	tmp_piece[ln] = 0;
-	return (tmp_piece);
-}
-
 t_piece		*create_piece(char **tmp_piece, t_piece *p, int ln, int col)
 {
 	int			i;
 
-	p->piece = (char**)malloc((sizeof(char*) * p->h) + 1);
+	if (!(p->piece = (char**)malloc((sizeof(char*) * p->h) + 1)))
+		return (NULL);	
 	i = -1;
-	while (ln + ++i < ln + p->h)
-		p->piece[i] = ft_strsub(tmp_piece[ln + i], col, p->w);
-	p->piece[i] = 0;
-	return (p);
+	while (++i < p->h)
+		if (!(p->piece[i] = ft_strsub(tmp_piece[ln + i], col, p->w)))
+			break;
+	if (i == p->h)
+	{	
+		p->piece[i] = 0;
+		return (p);
+	}
+	while (i-- > 0)
+		ft_strdel(&p->piece[i]);
+	free(p->piece);
+	return (NULL);
+
 }
 
 t_piece		*parse_piece(char **tmp_piece, t_piece *p)
@@ -71,16 +67,44 @@ t_piece		*parse_piece(char **tmp_piece, t_piece *p)
 	return (create_piece(tmp_piece, p, ln, col));
 }
 
+void		free_no_need_lines(char *ln, char **ln_split)
+{
+	ft_strdel(&ln);
+	free_splited_line(ln_split);
+}
+
 t_piece		*retrieve_piece(char *line)
 {
 	t_piece		*p;
 	char		**tmp_piece;
+	int			ln;
+	int			res;
+	char		**line_splited;
 
-	if (!(p = (t_piece*)malloc(sizeof(t_piece))))
+	write(2, "DONE1\n", 6);
+
+	if (!(p = (t_piece*)malloc(sizeof(t_piece)))
+		|| !(line_splited = ft_strsplit(line, ' '))
+		|| !(tmp_piece = (char**)malloc((sizeof(char*) * ft_atoi(line_splited[1]) + 1))))
 		return (NULL);
-	p->h = ft_atoi(ft_strsplit(line, ' ')[1]);
-	p->w = ft_atoi(ft_strsplit(line, ' ')[2]);
-	ft_strdel(&line);
-	tmp_piece = read_piece(line, p);
-	return (parse_piece(tmp_piece, p));
+
+	p->h = ft_atoi(line_splited[1]);
+	p->w = ft_atoi(line_splited[2]);
+	ln = -1;
+	while (++ln < p->h && (res = get_next_line(0, &line)) >= 0)
+		tmp_piece[ln] = line;
+	if (ln < p->h)
+	{	
+		while (ln-- > 0)
+			ft_strdel(&tmp_piece[ln]);
+		free(tmp_piece);
+	}
+	else
+	{
+		tmp_piece[ln] = 0;
+		p = parse_piece(tmp_piece, p);
+	}
+	free_no_need_lines(line, line_splited);
+	write(2, "DONE2\n", 6);
+	return (p);
 }

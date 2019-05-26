@@ -12,30 +12,43 @@
 
 #include "filler.h"
 
+
 t_map		*init_map(char *line)
 {
 	t_map		*m;
-	int			res;
+	char		**ln_split;
 
-	if (!(m = (t_map*)malloc((sizeof(t_map)))))
+	if (!(m = (t_map*)malloc(sizeof(t_map))))
 		return (NULL);
-	m->h = ft_atoi(ft_strsplit(line, ' ')[1]);
-	m->w = ft_atoi(ft_strsplit(line, ' ')[2]);
-	if (!(m->map = (char**)malloc((sizeof(char*) * m->h) + 1)))
+	if (!(ln_split = ft_strsplit(line, ' ')))
+	{
+		free(m);
+		ft_strdel(&line);
 		return (NULL);
+	}
+	ft_strdel(&line);
+	if (!(m->map = (char**)malloc((sizeof(char*) * ft_atoi(ln_split[1])) + 1)))
+	{
+		free_splited_line(ln_split);
+		free(m);
+		return (NULL);
+	}
+	m->h = ft_atoi(ln_split[1]);
+	m->w = ft_atoi(ln_split[2]);
 	m->p2_f_x = 0;
-	res = get_next_line(0, &line);
+	get_next_line(0, &line);
 	ft_strdel(&line);
 	return (m);
 }
 
-int			free_map(char **map, int ln, char *line)
+int			free_map(t_map		*m, int ln, char *line)
 {
 	int		i;
 
 	i = 0;
 	while (i < ln)
-		ft_strdel(&map[i++]);
+		ft_strdel(&m->map[i++]);
+	free(m);
 	ft_strdel(&line);
 	return (1);
 }
@@ -51,7 +64,7 @@ t_map		*retrieve_map(char *line)
 	ln = -1;
 	while (++ln < m->h && (res = get_next_line(0, &line)) == 1)
 	{
-		if (!(m->map[ln] = ft_strdup(line + 4)) && free_map(m->map, ln, line))
+		if (!(m->map[ln] = ft_strdup(line + 4)) && free_map(m, ln, line))
 			return (NULL);
 		if (ft_strrchr(m->map[ln], 'O'))
 		{

@@ -12,7 +12,30 @@
 
 #include "filler.h"
 
-int			parse_data(t_utils2 *u, char *line)
+void		free_rest_utils(t_filler *u)
+{
+	int i;
+
+	i = -1;
+	while (++i < u->p->h)
+		ft_strdel(&u->p->piece[i]);
+	free(&u->p);
+	i = -1;
+	while (++i < u->m->h)
+		ft_strdel(&u->m->map[i]);
+	free(&u->m);
+}
+
+int		free_splited_line(char **ln_split)
+{
+	ft_strdel(&ln_split[0]);
+	ft_strdel(&ln_split[1]);
+	ft_strdel(&ln_split[2]);
+	free(&ln_split);
+	return (1);
+}
+
+int			parse_data(t_filler *u, char *line)
 {
 	if (ft_strstr(line, "$$$ exec") &&
 		ft_strstr(line, "nboulif.filler") && line[10] - '0' == 2)
@@ -38,7 +61,7 @@ int			parse_data(t_utils2 *u, char *line)
 int			main(void)
 {
 	char		*line;
-	t_utils2	u;
+	t_filler	u;
 	int			res;
 
 	init_utils_struct(&u);
@@ -58,5 +81,6 @@ int			main(void)
 		if (u.best_y <= 0 && u.best_x <= 0)
 			break ;
 	}
+	// free_rest_utils(&u);
 	return (0);
 }
