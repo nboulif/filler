@@ -88,6 +88,4 @@ float				get_distance(int x1, int x2, int y1, int y2);
 void				reinit_utils_struct(t_filler *u);
 void				init_utils_struct(t_filler *u);
 
-int					free_splited_line(char **ln_split);
-
 #endif

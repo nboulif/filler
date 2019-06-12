@@ -14,25 +14,18 @@
 
 void		free_rest_utils(t_filler *u)
 {
-	int i;
-
-	i = -1;
-	while (++i < u->p->h)
-		ft_strdel(&u->p->piece[i]);
-	free(&u->p);
-	i = -1;
-	while (++i < u->m->h)
-		ft_strdel(&u->m->map[i]);
-	free(&u->m);
-}
-
-int		free_splited_line(char **ln_split)
-{
-	ft_strdel(&ln_split[0]);
-	ft_strdel(&ln_split[1]);
-	ft_strdel(&ln_split[2]);
-	free(&ln_split);
-	return (1);
+	if (u->p)
+	{
+		if (u->p->piece)
+			ft_tabdel(&u->p->piece);
+		free(u->p);
+	}
+	if (u->m)
+	{
+		if (u->m->map)
+			ft_tabdel(&u->m->map);
+		free(u->m);
+	}
 }
 
 int			parse_data(t_filler *u, char *line)
@@ -78,9 +71,9 @@ int			main(void)
 			return (-1);
 		get_my_best_pos(&u, 0, 0, 0);
 		send_result(&u);
+		free_rest_utils(&u);
 		if (u.best_y <= 0 && u.best_x <= 0)
 			break ;
 	}
-	// free_rest_utils(&u);
 	return (0);
 }

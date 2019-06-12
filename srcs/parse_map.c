@@ -12,7 +12,6 @@
 
 #include "filler.h"
 
-
 t_map		*init_map(char *line)
 {
 	t_map		*m;
@@ -27,13 +26,13 @@ t_map		*init_map(char *line)
 		return (NULL);
 	}
 	ft_strdel(&line);
+	m->h = ft_atoi(ln_split[1]);
 	if (!(m->map = (char**)malloc((sizeof(char*) * ft_atoi(ln_split[1])) + 1)))
 	{
-		free_splited_line(ln_split);
-		free(m);
+		ft_tabdel(&ln_split);
 		return (NULL);
 	}
-	m->h = ft_atoi(ln_split[1]);
+	m->map[m->h] = NULL;
 	m->w = ft_atoi(ln_split[2]);
 	m->p2_f_x = 0;
 	get_next_line(0, &line);
@@ -41,13 +40,9 @@ t_map		*init_map(char *line)
 	return (m);
 }
 
-int			free_map(t_map		*m, int ln, char *line)
+int			free_map(t_map *m, char *line)
 {
-	int		i;
-
-	i = 0;
-	while (i < ln)
-		ft_strdel(&m->map[i++]);
+	ft_tabdel(&m->map);
 	free(m);
 	ft_strdel(&line);
 	return (1);
@@ -64,7 +59,7 @@ t_map		*retrieve_map(char *line)
 	ln = -1;
 	while (++ln < m->h && (res = get_next_line(0, &line)) == 1)
 	{
-		if (!(m->map[ln] = ft_strdup(line + 4)) && free_map(m, ln, line))
+		if (!(m->map[ln] = ft_strdup(line + 4)) && free_map(m, line))
 			return (NULL);
 		if (ft_strrchr(m->map[ln], 'O'))
 		{
