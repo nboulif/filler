@@ -14,7 +14,7 @@
 
 void			send_result(t_filler *u)
 {
-	if (u->best_y == 9999)
+	if (u->best_y == INT_MAX || u->best_x == INT_MAX)
 	{
 		u->best_y = 0;
 		u->best_x = 0;
@@ -35,8 +35,9 @@ void			reinit_utils_struct(t_filler *u)
 	u->m = NULL;
 	u->p = NULL;
 	u->count_all_pos = 0;
-	u->best_y = 9999;
-	u->best_x = 9999;
+	u->count_en = 0;
+	u->best_y = INT_MAX;
+	u->best_x = INT_MAX;
 }
 
 void			init_utils_struct(t_filler *u)

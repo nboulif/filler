@@ -55,6 +55,7 @@ typedef struct		s_filler
 	t_piece		*p;
 	int			pp;
 	char		enemy_char;
+	int			count_en;
 	char		my_char;
 	int			best_y;
 	int			best_x;
@@ -79,9 +80,11 @@ t_piece				*create_piece(char **tmp_piece, t_piece *p, int ln,
 t_piece				*parse_piece(char **tmp_piece, t_piece *p);
 t_piece				*retrieve_piece(char *line);
 
-int					try_put_piece(t_filler *u, int m_ln, int m_col);
-float				get_dist_nearest_enemy(t_filler *u, int ln1, int col1);
-void				get_my_best_pos(t_filler *u, int ln, int col, int count);
+int					try_put_piece(t_filler *u, int m_ln, int m_col,
+					int *count_en);
+float				get_dist_enemy(t_filler *u, int ln1, int col1);
+void				update_best_values(t_filler *u, int ln, int col);
+void				get_my_best_pos(t_filler *u, int ln, int col);
 
 void				send_result(t_filler *u);
 float				get_distance(int x1, int x2, int y1, int y2);

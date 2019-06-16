@@ -12,19 +12,22 @@
 
 #include "filler.h"
 
-int			try_put_piece(t_filler *u, int m_ln, int m_col)
+int			try_put_piece(t_filler *u, int m_ln, int m_col, int *count_en)
 {
-	int p_ln;
-	int p_col;
-	int count_sp;
+	int		p_ln;
+	int		p_col;
+	int		count_sp;
 
 	p_ln = -1;
 	count_sp = 0;
+	(*count_en) = 0;
 	while (u->p->piece[++p_ln])
 	{
 		p_col = -1;
 		while (u->p->piece[p_ln][++p_col])
 		{
+			u->m->map[m_ln + p_ln][m_col + p_col] == u->enemy_char
+				? (*count_en)++ : 0;
 			if (u->p->piece[p_ln][p_col] == '.' ||
 			u->m->map[m_ln + p_ln][m_col + p_col] == '.')
 				;
@@ -38,7 +41,7 @@ int			try_put_piece(t_filler *u, int m_ln, int m_col)
 	return (count_sp);
 }
 
-float		get_dist_nearest_enemy(t_filler *u, int ln1, int col1)
+float		get_dist_enemy(t_filler *u, int ln1, int col1)
 {
 	int		ln;
 	int		col;
@@ -65,25 +68,31 @@ float		get_dist_nearest_enemy(t_filler *u, int ln1, int col1)
 	return (dist);
 }
 
-void		get_my_best_pos(t_filler *u, int ln, int col, int count)
+void		update_best_values(t_filler *u, int ln, int col)
 {
-	float tmp_dist;
+	u->best_y = ln;
+	u->best_x = col;
+}
+
+void		get_my_best_pos(t_filler *u, int ln, int col)
+{
+	float	dist;
+	int		count_en;
 
 	while (u->m->map[ln] && ln + u->p->h <= u->m->h)
 	{
 		while (u->m->map[ln][col] && col + u->p->w <= u->m->w)
 		{
-			if (try_put_piece(u, ln, col))
+			if ((try_put_piece(u, ln, col, &count_en)))
 			{
-				count++;
-				get_my_best_pos(u, ln, col + 1, count);
-				tmp_dist = get_dist_nearest_enemy(u,
-					ln + u->p->h - 1, col + u->p->w - 1);
-				if (u->best_y == 9999 || tmp_dist < u->dist)
+				dist = get_dist_enemy(u, ln + u->p->h - 1, col + u->p->w - 1);
+				get_my_best_pos(u, ln, col + 1);
+				if (u->best_y == INT_MAX || dist < u->dist
+					|| (dist == u->dist && count_en >= u->count_en))
 				{
-					u->best_y = ln;
-					u->best_x = col;
-					u->dist = tmp_dist;
+					update_best_values(u, ln, col);
+					u->dist = dist;
+					u->count_en = count_en;
 				}
 				return ;
 			}

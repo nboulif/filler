@@ -67,12 +67,12 @@ int			main(void)
 			if (res == 2 || res == -1)
 				break ;
 		}
-		if (res == -1)
-			return (-1);
-		get_my_best_pos(&u, 0, 0, 0);
+		if (res == -1 || !u.m)
+			return (0);
+		get_my_best_pos(&u, 0, 0);
 		send_result(&u);
 		free_rest_utils(&u);
-		if (u.best_y <= 0 && u.best_x <= 0)
+		if (u.best_y == INT_MAX && u.best_x == INT_MAX)
 			break ;
 	}
 	return (0);

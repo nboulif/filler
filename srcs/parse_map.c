@@ -27,7 +27,7 @@ t_map		*init_map(char *line)
 	}
 	ft_strdel(&line);
 	m->h = ft_atoi(ln_split[1]);
-	if (!(m->map = (char**)malloc((sizeof(char*) * ft_atoi(ln_split[1])) + 1)))
+	if (!(m->map = (char**)malloc(sizeof(char*) * (m->h + 1))))
 	{
 		ft_tabdel(&ln_split);
 		return (NULL);

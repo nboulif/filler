@@ -24,7 +24,7 @@ t_piece		*create_piece(char **tmp_piece, t_piece *p, int ln, int col)
 {
 	int			i;
 
-	if (!(p->piece = (char**)malloc((sizeof(char*) * p->h) + 1)))
+	if (!(p->piece = (char**)malloc(sizeof(char*) * (p->h + 1))))
 		return (NULL);
 	i = -1;
 	while (++i < p->h)
@@ -83,7 +83,7 @@ t_piece		*retrieve_piece(char *line)
 	if (!(p = (t_piece*)malloc(sizeof(t_piece)))
 		|| !(line_splited = ft_strsplit(line, ' '))
 		|| !(tmp_piece = (char**)malloc((sizeof(char*)
-			* ft_atoi(line_splited[1]) + 1))))
+			* (ft_atoi(line_splited[1]) + 1)))))
 		return (NULL);
 	p->h = ft_atoi(line_splited[1]);
 	p->w = ft_atoi(line_splited[2]);
