@@ -149,7 +149,8 @@ class GameController():
 
 		self.final = tk.StringVar()
 		self.final.set(f'')
-		tk.Label(self.result.frame, textvariable = self.final, fg = f"white", font = font, justify='center', bg='black').pack()
+		self.final_label = tk.Label(self.result.frame, textvariable = self.final, fg = f"white", font = font, justify='center', bg='black')
+		self.final_label.pack()
 
 	def start(self):
 		self.window_ctrl.window.after(1, self.loop_read)
@@ -207,12 +208,21 @@ class GameController():
 			self.res += 1
 			self.result.score_res.set(f"Score = {self.res}")
 			if self.res - (self.res1 + 1) == 2:
+				if self.p1.name == "nboulif":
+					self.final_label.config(fg="green")
+				else:
+					self.final_label.config(fg="gray")
+				self.final_label.pack()
 				self.final.set(f"Winner = {self.p1.name}")
-				self.result.frame.configure(background='green')
 		else:
 			self.res1 += 1
 			self.result.score_res1.set(f"Score = {self.res1}")
 			if self.res1 - (self.res + 1) == 2:
+				if self.p2.name == "nboulif":
+					self.final_label.config(fg="green")
+				else:
+					self.final_label.config(fg="gray")
+				self.final_label.pack()
 				self.final.set(f"Winner = {self.p2.name}")
 
 if __name__ == '__main__':

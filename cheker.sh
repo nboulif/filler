@@ -20,8 +20,8 @@ tools/players/superjeannot.filler"
 # tools/players/sofchami.filler 
 
 all_maps="tools/maps/map00 
-tools/maps/map01
-tools/maps/map02"
+tools/maps/map01"
+# tools/maps/map02"
 #tools/maps/map03
 
 run_games() {
