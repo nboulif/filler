@@ -46,6 +46,7 @@ float		get_dist_enemy(t_filler *u, int ln1, int col1)
 	int		ln;
 	int		col;
 	float	dist;
+	float	new_dist;
 
 	dist = 0.0;
 	ln = 0;
@@ -55,12 +56,9 @@ float		get_dist_enemy(t_filler *u, int ln1, int col1)
 		while (u->m->map[ln][col])
 		{
 			if (u->m->map[ln][col] && u->m->map[ln][col] == u->enemy_char)
-			{
-				if (dist == 0.0 || dist > get_distance(col, col1, ln, ln1))
-				{
-					dist = get_distance(col, col1, ln, ln1);
-				}
-			}
+				if (dist == 0.0 || dist > (new_dist = (col1 - col) *
+					(col1 - col) + (ln1 - ln) * (ln1 - ln)))
+					dist = new_dist;
 			col++;
 		}
 		ln++;

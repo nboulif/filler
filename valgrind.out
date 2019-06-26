@@ -1,0 +1,9 @@
+==89350== Memcheck, a memory error detector
+==89350== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==89350== Using Valgrind-3.14.0 and LibVEX; rerun with -h for copyright info
+==89350== Command: ./tools/filler_vm -f tools/maps/map00 -p1 ./nboulif.filler -p2 ./tools/players/superjeannot.filler
+==89350== Parent PID: 71631
+==89350== 
+==89350== execve(0x104890450(/usr/bin/ruby), 0x104890938, 0x104890980) failed, errno 2
+==89350== EXEC FAILED: I can't recover from execve() failing, so I'm dying.
+==89350== Add more stringent tests in PRE(sys_execve), or work out how to recover.

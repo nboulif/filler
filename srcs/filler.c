@@ -6,7 +6,7 @@
 /*   By: nboulif <nboulif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 23:59:12 by nboulif           #+#    #+#             */
-/*   Updated: 2019/03/05 00:41:45 by nboulif          ###   ########.fr       */
+/*   Updated: 2019/06/25 22:43:44 by nboulif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,47 +28,53 @@ void		free_rest_utils(t_filler *u)
 	}
 }
 
-int			parse_data(t_filler *u, char *line)
+int			parse_data(t_filler *u, char *line, int *res)
 {
 	if (ft_strstr(line, "$$$ exec") &&
 		ft_strstr(line, "nboulif.filler") && line[10] - '0' == 2)
 	{
+		ft_strdel(&line);
 		u->pp = 2;
 		u->my_char = 'X';
 		u->enemy_char = 'O';
 	}
 	else if (ft_strstr(line, "Plateau"))
 	{
-		if (!(u->m = retrieve_map(line)))
-			return (-1);
+		(*res) = -1;
+		if (!(u->m = init_map(line)))
+			ft_strdel(&line);
+		else if (retrieve_map_rec(u->m, 0))
+			(*res) = 1;
 	}
 	else if (ft_strstr(line, "Piece"))
 	{
-		if (!(u->p = retrieve_piece(line)))
-			return (-1);
-		return (2);
+		u->p = retrieve_piece(line);
+		if (((*res) = u->p ? 2 : -1) == -1)
+			free_rest_utils(u);
 	}
-	return (1);
+	else
+		ft_strdel(&line);
+	return (*res);
 }
 
 int			main(void)
 {
 	char		*line;
 	t_filler	u;
-	int			res;
+	int			ret;
 
-	init_utils_struct(&u);
+	u.pp = 1;
+	u.my_char = 'O';
+	u.enemy_char = 'X';
 	while (1)
 	{
 		reinit_utils_struct(&u);
-		while ((res = get_next_line(0, &line)) == 1)
-		{
-			res = parse_data(&u, line);
-			if (res == 2 || res == -1)
+		while ((ret = get_next_line(0, &line)) == 1 &&
+			parse_data(&u, line, &ret) > 0)
+			if (ret == 2)
 				break ;
-		}
-		if (res == -1 || !u.m)
-			return (0);
+		if (ret <= 0)
+			break ;
 		get_my_best_pos(&u, 0, 0);
 		send_result(&u);
 		free_rest_utils(&u);

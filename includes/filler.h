@@ -64,20 +64,20 @@ typedef struct		s_filler
 
 }					t_filler;
 
-int					parse_data(t_filler *u, char *line);
+int					parse_data(t_filler *u, char *line, int *res);
 int					main(void);
 
 int					get_next_line(const int fd, char **line);
 
 t_map				*init_map(char *line);
-t_map				*retrieve_map(char *line);
+t_map				*retrieve_map_rec(t_map *m, int ln);
 
 int					is_empty_col(char **piece, int ln_start,
 					int ln_max, int col);
 char				**read_piece(char *line, t_piece *p);
 t_piece				*create_piece(char **tmp_piece, t_piece *p, int ln,
 					int col);
-t_piece				*parse_piece(char **tmp_piece, t_piece *p);
+t_piece				*parse_piece(char **tmp_piece);
 t_piece				*retrieve_piece(char *line);
 
 int					try_put_piece(t_filler *u, int m_ln, int m_col,
@@ -87,8 +87,6 @@ void				update_best_values(t_filler *u, int ln, int col);
 void				get_my_best_pos(t_filler *u, int ln, int col);
 
 void				send_result(t_filler *u);
-float				get_distance(int x1, int x2, int y1, int y2);
 void				reinit_utils_struct(t_filler *u);
-void				init_utils_struct(t_filler *u);
 
 #endif

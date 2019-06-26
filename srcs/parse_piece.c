@@ -30,22 +30,24 @@ t_piece		*create_piece(char **tmp_piece, t_piece *p, int ln, int col)
 	while (++i < p->h)
 		if (!(p->piece[i] = ft_strsub(tmp_piece[ln + i], col, p->w)))
 			break ;
+	p->piece[i] = 0;
 	if (i == p->h)
-	{
-		p->piece[i] = 0;
 		return (p);
-	}
 	while (i-- > 0)
 		ft_strdel(&p->piece[i]);
-	free(p->piece);
+	free(&p);
+	ft_tabdel(&p->piece);
 	return (NULL);
 }
 
-t_piece		*parse_piece(char **tmp_piece, t_piece *p)
+t_piece		*parse_piece(char **tmp_piece)
 {
+	t_piece		*p;
 	int			ln;
 	int			col;
 
+	if (!(p = (t_piece*)malloc(sizeof(t_piece))))
+		return (NULL);
 	ln = 0;
 	while (!(ft_strchr(tmp_piece[ln], '*')))
 		ln++;
@@ -66,35 +68,30 @@ t_piece		*parse_piece(char **tmp_piece, t_piece *p)
 	return (create_piece(tmp_piece, p, ln, col));
 }
 
-void		free_no_need_lines(char *ln, char **ln_split)
-{
-	ft_strdel(&ln);
-	ft_tabdel(&ln_split);
-}
-
 t_piece		*retrieve_piece(char *line)
 {
 	t_piece		*p;
 	char		**tmp_piece;
-	int			ln;
-	int			res;
 	char		**line_splited;
+	int			ln;
 
-	if (!(p = (t_piece*)malloc(sizeof(t_piece)))
-		|| !(line_splited = ft_strsplit(line, ' '))
+	tmp_piece = NULL;
+	if (!(line_splited = ft_strsplit(line, ' '))
 		|| !(tmp_piece = (char**)malloc((sizeof(char*)
 			* (ft_atoi(line_splited[1]) + 1)))))
+	{
+		line_splited ? ft_tabdel(&line_splited) : 0;
+		tmp_piece ? ft_tabdel(&tmp_piece) : 0;
+		ft_strdel(&line);
 		return (NULL);
-	p->h = ft_atoi(line_splited[1]);
-	p->w = ft_atoi(line_splited[2]);
+	}
+	ft_strdel(&line);
 	ln = -1;
-	while (++ln < p->h && (res = get_next_line(0, &line)) >= 0)
+	while (++ln < ft_atoi(line_splited[1]) && get_next_line(0, &line) == 1)
 		tmp_piece[ln] = line;
-	tmp_piece[ln] = 0;
-	if (ln < p->h)
-		ft_tabdel(&tmp_piece);
-	else
-		p = parse_piece(tmp_piece, p);
-	free_no_need_lines(line, line_splited);
+	tmp_piece[ln] = NULL;
+	p = ln == ft_atoi(line_splited[1]) ? parse_piece(tmp_piece) : NULL;
+	ft_tabdel(&line_splited);
+	ft_tabdel(&tmp_piece);
 	return (p);
 }

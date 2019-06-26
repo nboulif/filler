@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nboulif <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: nboulif <nboulif@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/02/04 23:59:28 by nboulif           #+#    #+#              #
-#    Updated: 2019/02/04 23:59:30 by nboulif          ###   ########.fr        #
+#    Updated: 2019/06/25 22:09:35 by nboulif          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,9 @@ NAME = nboulif.filler
 
 CC = gcc
 
-FLAGS = -Wall -Wextra -Werror -O3 -fsanitize=address
+# FLAGS = -Wall -Wextra -Werror -O3
+FLAGS = -Wall -Wextra -Werror -O3 -g -v
+# FLAGS = -Wall -Wextra -Werror -O3 -fsanitize=address
 
 LIBRARIES = -lft -L$(LIBFT_DIRECTORY)
 INCLUDES = -I$(HEADERS_DIRECTORY) -I$(LIBFT_HEADERS)
@@ -72,5 +74,5 @@ fclean: clean
 	@echo "$(NAME): $(RED)$(LIBFT) was deleted$(RESET)"
 	@rm -f $(NAME)
 	@echo "$(NAME): $(RED)$(NAME) was deleted$(RESET)"
-	
+
 re: fclean all

@@ -25,11 +25,6 @@ void			send_result(t_filler *u)
 	ft_putstr_fd("\n", 1);
 }
 
-float			get_distance(int x1, int x2, int y1, int y2)
-{
-	return ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-}
-
 void			reinit_utils_struct(t_filler *u)
 {
 	u->m = NULL;
@@ -38,12 +33,4 @@ void			reinit_utils_struct(t_filler *u)
 	u->count_en = 0;
 	u->best_y = INT_MAX;
 	u->best_x = INT_MAX;
-}
-
-void			init_utils_struct(t_filler *u)
-{
-	u->pp = 1;
-	u->my_char = 'O';
-	u->enemy_char = 'X';
-	reinit_utils_struct(u);
 }
