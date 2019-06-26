@@ -14,8 +14,8 @@ NAME = nboulif.filler
 
 CC = gcc
 
-# FLAGS = -Wall -Wextra -Werror -O3
-FLAGS = -Wall -Wextra -Werror -O3 -g -v
+FLAGS = -Wall -Wextra -Werror -O3
+# FLAGS = -Wall -Wextra -Werror -O3 -g -v
 # FLAGS = -Wall -Wextra -Werror -O3 -fsanitize=address
 
 LIBRARIES = -lft -L$(LIBFT_DIRECTORY)
